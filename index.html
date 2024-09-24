@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Registration Form</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .form-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .form-field {
+      margin-bottom: 15px;
+    }
+
+    .form-field label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-field input,
+    .form-field select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #218838;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: collapse;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .underage {
+      background-color: red;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="form-container">
+    <h2>Registration Form</h2>
+    <div class="form-field">
+      <label for="name">Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+    </div>
+
+    <div class="form-field">
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Enter your email">
+    </div>
+
+    <div class="form-field">
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" placeholder="Enter your phone number">
+    </div>
+
+    <div class="form-field">
+      <label for="dateOfBirth">Date of Birth:</label>
+      <input type="date" id="dateOfBirth">
+    </div>
+
+    <div class="form-field">
+      <label for="gender">Gender:</label>
+      <select id="gender">
+        <option value="Male">Male</option>
+        <option value="Female">Female</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <button onclick="submitForm()">Submit</button>
+  </div>
+
+  <div>
+    <h3>Submitted Information</h3>
+    <table id="infoTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Date of Birth</th>
+          <th>Gender</th>
+          <th>Age</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Function to calculate age from date of birth
+    function calculateAge(dateOfBirth) {
+      const birthDate = new Date(dateOfBirth);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDifference = today.getMonth() - birthDate.getMonth();
+
+      if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      return age;
+    }
+
+    // Function to generate random phone number on page load
+    window.onload = function () {
+      document.getElementById('phone').value = Math.floor(10000000 + Math.random() * 90000000);
+    }
+
+    function submitForm() {
+      // Get values from input fields
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const dateOfBirth = document.getElementById('dateOfBirth').value;
+      const gender = document.getElementById('gender').value;
+
+      // Validation to ensure no empty fields
+      if (name === "" || email === "" || phone === "" || dateOfBirth === "" || gender === "") {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      // Validation to ensure phone number is numeric
+      if (isNaN(phone)) {
+        alert("Phone number must just be numbers.");
+        return;
+      }
+
+      // Calculate age
+      const age = calculateAge(dateOfBirth);
+
+      // Insert the values into the table
+      const table = document.querySelector("#infoTable tbody");
+      const newRow = table.insertRow();
+
+      newRow.insertCell(0).innerHTML = name;
+      newRow.insertCell(1).innerHTML = email;
+      newRow.insertCell(2).innerHTML = phone;
+      newRow.insertCell(3).innerHTML = dateOfBirth;
+      newRow.insertCell(4).innerHTML = gender;
+      newRow.insertCell(5).innerHTML = age;
+
+      // If the person is under 18, color the row red
+      if (age < 18) {
+        newRow.classList.add('underage');
+      }
+
+      // Clear input fields after submission
+      document.getElementById('name').value = "";
+      document.getElementById('email').value = "";
+      document.getElementById('phone').value = Math.floor(10000000 + Math.random() * 90000000); // regenerate random phone
+      document.getElementById('dateOfBirth').value = "";
+      document.getElementById('gender').value = "Male";
+
+    }
+  </script>
+
+</body>
+
+</html>
