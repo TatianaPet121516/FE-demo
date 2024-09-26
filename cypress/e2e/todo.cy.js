@@ -53,6 +53,8 @@ describe('Complete a todo item', () => {
     // Verify that the task is marked as completed (check the class or strikethrough style)
     cy.get('.todo-list li.completed').should('contain', newTask);
   });
+
+
 });
 
 // Delete a To-Do item
@@ -96,6 +98,23 @@ describe('Edit a todo item', () => {
     
     // Verify the updated task is displayed
     cy.get('.todo-list').should('contain', updatedTask);
+  });
+
+   it('should clear a todo item', () => {
+    // Add a 2 new task 
+    const task1 = 'Read a book';
+    const task2 = 'Read a novel';
+    cy.get('input.new-todo').type(`${task1}{enter}`);
+    cy.get('input.new-todo').type(`${task2}{enter}`);
+
+    // Verify the tasks is displayed in the list
+    cy.get('.todo-list li').should('have.length', 2);
+    
+    // Press the Clear button
+    cy.contains('Clear').click();
+    
+    // Verify the tasks still is displayed in the list
+    cy.get('.todo-list li').should('have.length', 2);
   });
 });
 
